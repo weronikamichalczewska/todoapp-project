@@ -1,39 +1,36 @@
 const ToDoModel = require("../models/ToDoModel");
 
 module.exports.getToDo = async (req, res) => {
-    const todo = await ToDoModel.find();
-    res.send(todo);
-}
+  const todo = await ToDoModel.find();
+  res.send(todo);
+};
 
 module.exports.saveToDo = (req, res) => {
-    const { text } = req.body;
+  const { text } = req.body;
 
-    ToDoModel
-        .create({ text })
-        .then((data) =>{ 
-            console.log("Added Successfully...")
-            console.log(data)
-            res.send(data)
-        })
-        .catch((err) => console.log(err));
-}
+  ToDoModel.create({ text, createdAt: Date.now() }) // dodaj pole z datą
+    .then((data) => {
+      console.log("Added Successfully...");
+      console.log(data);
+      res.send(data);
+    })
+    .catch((err) => console.log(err));
+};
 
 module.exports.deleteToDo = (req, res) => {
-    const { _id } = req.body;
+  const { _id } = req.body;
 
-    console.log('id ---> ', _id);
+  console.log("id ---> ", _id);
 
-    ToDoModel
-        .findByIdAndDelete(_id)
-        .then(() => res.set(201).send("Deleted Successfully..."))
-        .catch((err) => console.log(err));
-}
+  ToDoModel.findByIdAndDelete(_id)
+    .then(() => res.set(201).send("Deleted Successfully..."))
+    .catch((err) => console.log(err));
+};
 
 module.exports.updateToDo = (req, res) => {
-    const { _id, text } = req.body;
+  const { _id, text } = req.body;
 
-    ToDoModel
-        .findByIdAndUpdate(_id, { text })
-        .then(() => res.set(201).send("Updated Successfully..."))
-        .catch((err) => console.log(err));
-}
+  ToDoModel.findByIdAndUpdate(_id, { text, updatedAt: Date.now() }) // dodaj pole z datą
+    .then(() => res.set(201).send("Updated Successfully..."))
+    .catch((err) => console.log(err));
+};
